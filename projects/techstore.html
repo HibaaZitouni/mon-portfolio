@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechStore — Hiba Zitouni & Adam Tajiri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --ink: #0b1628;
+        --ink-1: #152340;
+        --ink-2: #1e3358;
+        --ink-3: #243a60;
+        /* NEON CYAN — tu peux changer ici */
+        --neon: #00f0ff;
+        --neon-dim: #00a8b3;
+        --neon-glow: rgba(0, 240, 255, 0.12);
+        --amber: #e8c97a;
+        --amber-dim: rgba(232, 201, 122, 0.15);
+        --rose: #ff6b8a;
+        --slate: #8a8880;
+        --slate-light: #9a9690;
+        --border: rgba(0, 240, 255, 0.2);
+        --border-soft: rgba(0, 240, 255, 0.1);
+        --card: rgba(255, 255, 255, 0.03);
+        --text: #f0ede8;
+        --radius: 6px;
+        --radius-lg: 14px;
+        --radius-xl: 22px;
+      }
+
+      /* Remplacement de tous les anciens "teal" par "neon" */
+      .team-role, .para-num, .breadcrumb a, .nav-back:hover, .team-link-mini:hover,
+      .project-tag-hero, .team-label-text, .result-val, .pdot.active, .next-hint-icon,
+      .btn-primary, .tech-pill.primary, .nav-logo span, .footer-logo span {
+        color: var(--neon);
+      }
+      .btn-primary, .project-tag-hero, .team-card.primary-card::before, .pdot.active {
+        background: var(--neon);
+        color: var(--ink);
+      }
+      .btn-primary:hover {
+        box-shadow: 0 8px 24px rgba(0, 240, 255, 0.25);
+      }
+      .next-hint:hover .next-hint-icon, .btn-ghost:hover {
+        border-color: var(--neon);
+        background: var(--neon-glow);
+      }
+      .team-link-mini:hover, .nav-back:hover {
+        color: var(--neon);
+      }
+      .media-frame.active-glow {
+        border-color: rgba(0, 240, 255, 0.35);
+        box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0, 240, 255, 0.1);
+      }
+      .project-level-hero {
+        background: rgba(0, 240, 255, 0.1);
+        border-color: rgba(0, 240, 255, 0.2);
+        color: var(--neon);
+      }
+      .para-highlight {
+        border-left-color: var(--neon);
+        background: var(--neon-glow);
+      }
+      /* Garder les anciennes variables pour compatibilité */
+      .project-tag-hero, .team-label-text, .result-val {
+        background: transparent;
+        color: var(--neon);
+      }
+      .project-tag-hero {
+        background: rgba(0, 240, 255, 0.12);
+      }
+      .btn-primary {
+        background: var(--neon);
+        color: var(--ink);
+      }
+      .btn-primary:hover {
+        box-shadow: 0 8px 24px rgba(0, 240, 255, 0.3);
+      }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: "Outfit", sans-serif;
+        background: var(--ink);
+        color: var(--text);
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0.4;
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: var(--ink); }
+      ::-webkit-scrollbar-thumb { background: var(--neon-dim); border-radius: 2px; }
+
+      /* NAVBAR */
+      nav {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.1rem 5vw;
+        background: rgba(11, 22, 40, 0.85);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-soft);
+      }
+      .nav-logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text);
+        text-decoration: none;
+        letter-spacing: 0.02em;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .nav-logo span { color: var(--neon); }
+      .nav-logo .logo-icon { font-size: 1.1rem; }
+
+      .nav-back {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--slate);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-back:hover { color: var(--neon); }
+      .nav-back svg { transition: transform 0.2s; }
+      .nav-back:hover svg { transform: translateX(-3px); }
+
+      /* HERO avec colonne droite pour le binôme */
+      .project-hero {
+        padding: 9rem 5vw 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-bg-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+      }
+      .blob-1 {
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(0,240,255,0.07) 0%, transparent 70%);
+        top: -100px; right: -50px;
+      }
+      .blob-2 {
+        width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(0,240,255,0.04) 0%, transparent 70%);
+        bottom: 50px; left: -80px;
+      }
+
+      .hero-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .hero-left {
+        flex: 2;
+        min-width: 260px;
+      }
+      .hero-right {
+        flex: 1;
+        min-width: 280px;
+        background: var(--ink-1);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.2rem 1.5rem;
+        backdrop-filter: blur(4px);
+      }
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--slate);
+      }
+      .breadcrumb a { color: var(--neon); text-decoration: none; }
+      .breadcrumb a:hover { text-decoration: underline; }
+      .breadcrumb-sep { opacity: 0.4; }
+
+      .project-hero-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 300;
+        line-height: 1.1;
+        margin-bottom: 0.8rem;
+        letter-spacing: -0.01em;
+      }
+      .project-hero-title em {
+        font-style: italic;
+        color: var(--neon);
+      }
+
+      .project-meta-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      .project-tag-hero {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        background: rgba(0,240,255,0.12);
+        border: 1px solid rgba(0,240,255,0.2);
+      }
+      .project-level-hero {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        background: rgba(255,107,138,0.1);
+        color: var(--rose);
+        border: 1px solid rgba(255,107,138,0.2);
+      }
+      .project-year {
+        font-size: 0.72rem;
+        color: var(--slate);
+        letter-spacing: 0.08em;
+      }
+
+      .project-hero-desc {
+        font-size: 0.95rem;
+        font-weight: 300;
+        color: var(--slate-light);
+        max-width: 52ch;
+        line-height: 1.8;
+        margin-top: 0.8rem;
+      }
+
+      /* Carte binôme dans le héros */
+      .team-card-compact {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .compact-avatar {
+        width: 52px;
+        height: 52px;
+        background: var(--ink-2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        border: 1px solid var(--border);
+      }
+      .compact-info .compact-name {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.1rem;
+      }
+      .compact-role {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--neon);
+      }
+      .compact-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+      }
+      .compact-skill {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.5rem;
+        background: rgba(255,255,255,0.04);
+        border-radius: 4px;
+      }
+      .hero-right .team-label-small {
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--slate);
+        margin-bottom: 0.8rem;
+      }
+
+      /* Reste du style (media, text-panel, tech-footer, etc.) inchangé sauf couleurs */
+      .section-divider {
+        height: 2px;
+        background: var(--border-soft);
+        margin: 1 5vw;
+      }
+      .content-section {
+        display: grid;
+        grid-template-columns: 1.5fr 0.8fr;
+        min-height: 100vh;
+        position: relative;
+      }
+      .media-panel {
+        position: sticky;
+        top: 70px;
+        height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 2.5rem 3rem 5vw;
+        gap: 1rem;
+      }
+      .media-frame {
+        width: 100%;
+        max-width: 80%;
+        aspect-ratio: 16/10;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        background: var(--ink-1);
+        border: 1px solid var(--border-soft);
+        position: relative;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+        transition: border-color 0.4s;
+      }
+      .media-frame img, .media-frame video, .media-frame iframe {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .media-caption {
+        font-size: 0.72rem;
+        color: var(--slate);
+        text-align: center;
+        font-style: italic;
+      }
+      .progress-dots {
+        display: flex;
+        gap: 0.45rem;
+        align-items: center;
+        margin-top: 0.5rem;
+      }
+      .pdot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .pdot.active {
+        background: var(--neon);
+        width: 20px;
+        border-radius: 3px;
+      }
+      .text-panel {
+        padding: 3rem 5vw 3rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .paragraph-block {
+        display: none;
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        padding-bottom: 3rem;
+      }
+      .paragraph-block.active { display: block; }
+      .paragraph-block.visible { opacity: 1; transform: translateY(0); }
+      .para-num {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.7rem;
+        color: var(--neon);
+        letter-spacing: 0.16em;
+        margin-bottom: 0.5rem;
+      }
+      .para-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .para-title em { font-style: italic; color: var(--neon); }
+      .para-text {
+        font-size: 0.92rem;
+        font-weight: 300;
+        color: var(--slate-light);
+        line-height: 1.85;
+        margin-bottom: 1rem;
+      }
+      .para-text strong { color: var(--text); font-weight: 500; }
+      .para-highlight {
+        padding: 1rem 1.3rem;
+        background: var(--neon-glow);
+        border-left: 2px solid var(--neon);
+        border-radius: 0 var(--radius) var(--radius) 0;
+        margin: 1.2rem 0;
+      }
+      .next-hint {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: 2rem;
+        cursor: pointer;
+        width: fit-content;
+      }
+      .next-hint-text {
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--slate);
+      }
+      .next-hint-icon {
+        width: 28px; height: 28px;
+        border: 1px solid var(--border-soft);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        animation: bounceRight 1.8s ease-in-out infinite;
+      }
+      @keyframes bounceRight {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(4px); }
+      }
+      .end-actions {
+        display: none;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+      .end-actions.visible { display: flex; }
+      .btn-primary, .btn-ghost {
+        padding: 0.75rem 1.8rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-radius: var(--radius);
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: var(--neon);
+        color: var(--ink);
+        border: none;
+      }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,240,255,0.25); }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border-soft);
+      }
+      .btn-ghost:hover { border-color: var(--neon); background: var(--neon-glow); }
+      .tech-footer {
+        padding: 4rem 5vw 5rem;
+        background: var(--ink-1);
+        border-top: 1px solid var(--border-soft);
+      }
+      .tech-footer-inner { max-width: 860px; margin: 0 auto; }
+      .tf-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate);
+        margin-bottom: 1.5rem;
+      }
+      .tech-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 3rem;
+      }
+      .tech-pill {
+        font-size: 0.78rem;
+        font-weight: 400;
+        color: var(--slate-light);
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border-soft);
+        border-radius: 100px;
+        padding: 0.4rem 1rem;
+        transition: all 0.2s;
+      }
+      .tech-pill:hover { background: var(--neon-glow); border-color: rgba(0,240,255,0.3); color: var(--text); }
+      .tech-pill.primary { background: var(--neon-glow); border-color: rgba(0,240,255,0.25); color: var(--neon); }
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .result-card {
+        background: var(--card);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.3rem 1.5rem;
+      }
+      .result-val {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--neon);
+        line-height: 1;
+        margin-bottom: 0.4rem;
+      }
+      .result-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--slate);
+      }
+      footer {
+        padding: 1.8rem 5vw;
+        border-top: 1px solid var(--border-soft);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        color: var(--slate);
+      }
+      .footer-logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.95rem;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .footer-logo span { color: var(--neon); }
+      @media (max-width: 860px) {
+        .content-section { grid-template-columns: 1fr; }
+        .media-panel { position: relative; top: 0; height: auto; padding: 10rem 5vw; }
+        .text-panel { padding: 1.5rem 5vw; }
+        .results-grid { grid-template-columns: 1fr 1fr; }
+        .hero-flex { flex-direction: column; }
+        .hero-right { width: 100%; }
+      }
+      @media (max-width: 560px) {
+        .results-grid { grid-template-columns: 1fr; }
+      }
+      /* Amélioration du bloc binôme */
+.hero-right {
+  background: var(--ink-1);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.5rem;
+}
+
+.team-card-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.compact-avatar {
+  width: 52px;
+  height: 52px;
+  background: var(--ink-2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.compact-info {
+  flex: 2;
+  min-width: 150px;
+}
+
+.compact-name {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.compact-role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--neon);
+  margin: 0.1rem 0;
+}
+
+.compact-meta {
+  font-size: 0.68rem;
+  color: var(--slate);
+}
+
+.compact-contacts-list {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+}
+
+.contact-item svg {
+  flex-shrink: 0;
+  color: var(--slate-light);
+  transition: color 0.2s;
+}
+
+.contact-item a {
+  color: var(--slate-light);
+  text-decoration: none;
+  transition: color 0.2s;
+  word-break: break-all;
+}
+
+.contact-item:hover svg,
+.contact-item:hover a {
+  color: var(--neon);
+}
+
+/* Responsive : sur petit écran, la liste des contacts passe sous les infos */
+@media (max-width: 860px) {
+  .team-card-compact {
+    flex-direction: column;
+  }
+  .compact-contacts-list {
+    width: 100%;
+  }
+}
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon"></span> Hiba Zitouni<span></span>
+      </a>
+      <a href="index.html#projects" class="nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to projects
+      </a>
+    </nav>
+
+    <div class="project-hero">
+      <div class="hero-bg-blob blob-1"></div>
+      <div class="hero-bg-blob blob-2"></div>
+      <div class="hero-flex">
+        <div class="hero-left">
+          <div class="breadcrumb">
+            <a href="index.html">Portfolio</a>
+            <span class="breadcrumb-sep">›</span>
+            <a href="index.html#projects">Projects</a>
+            <span class="breadcrumb-sep">›</span>
+            <span>E‑commerce Platform</span>
+          </div>
+          <h1 class="project-hero-title">
+            TechStore — <em>E‑commerce</em> Platform
+          </h1>
+          <div class="project-meta-row">
+            <span class="project-tag-hero">Web / Fullstack</span>
+            <span class="project-tag-hero">PHP · MySQL</span>
+            <span class="project-year">2026</span>
+          </div>
+          <p class="project-hero-desc">
+            A complete e‑commerce solution built in pair — from product catalog to order tracking,
+            with secure payments and real‑time email confirmations.
+          </p>
+        </div>
+
+        <div class="hero-right">
+  <div class="team-label-small">Built en Binôme With</div>
+  <div class="team-card-compact">
+    <!-- Avatar / Photo -->
+    <div class="compact-avatar">
+      <span>👨</span>
+    </div>
+
+    <!-- Infos principales -->
+    <div class="compact-info">
+      <div class="compact-name">Adam Tajiri</div>
+      <div class="compact-meta">EST Meknès · DUT Informatique</div>
+    </div>
+
+    <!-- Liste des contacts (icône + texte) -->
+    <div class="compact-contacts-list">
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <a href="tel:+212612345678">+212 6 12 34 56 78</a>
+      </div>
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <a href="mailto:adam.tajiri@example.com">adam.tajiri@example.com</a>
+      </div>
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+        </svg>
+        <a href="https://github.com/adam-tajiri" target="_blank">github.com/adam-tajiri</a>
+      </div>
+      <div class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+          <rect x="2" y="9" width="4" height="12"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>
+        <a href="https://linkedin.com/in/adam-tajiri" target="_blank">linkedin.com/in/adam-tajiri</a>
+      </div>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+     <div class="content-section">
+ 
+      <!-- LEFT: sticky media panel -->
+      <div class="media-panel">
+        <div class="media-frame" id="mediaFrame">
+ 
+          <!-- ════════════════════════════════════════
+               📷  IMAGE DEMO — uncomment to use:
+               <img src="YOUR_SCREENSHOT.png" alt="Project screenshot" />
+ 
+               🎬  LOCAL VIDEO — uncomment to use:
+               
+ 
+               🌐  YOUTUBE EMBED — uncomment to use:
+               <iframe
+                 src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=0&rel=0"
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                 allowfullscreen>
+               </iframe>
+               ════════════════════════════════════════ -->
+            <video autoplay muted loop playsinline>
+                <source src="test.mp4" type="video/mp4" />
+            </video>
+        </div>
+        <div class="media-caption" id="mediaCaption">E-commerce Platform — Live demo</div>
+      </div>
+
+      <div class="text-panel">
+        <div class="paragraphs-wrapper" id="paragraphsWrapper">
+          <div class="paragraph-block active" data-index="0" >
+            <div class="para-num">01 / Overview</div>
+            <h2 class="para-title">Building a full <em>e‑commerce</em> experience</h2>
+            <p class="para-text">This project was born out of a real challenge: designing a complete online store from the ground up, handling everything from <strong>product catalog management</strong> to the final order confirmation email.</p>
+            <p class="para-text">We chose <strong>Laravel</strong> for the backend for its elegant routing, ORM capabilities, and built‑in authentication scaffolding — allowing us to focus on business logic rather than boilerplate.</p>
+            <div class="para-highlight">"A real e‑commerce isn't just a product list — it's a full journey, from browsing to checkout to delivery confirmation."</div>
+            <div class="next-hint" onclick="nextParagraph()">
+              <span class="next-hint-text">Next</span>
+              <div class="next-hint-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+          </div>
+          <div class="paragraph-block" data-index="1" >
+            <div class="para-num">02 / Architecture</div>
+            <h2 class="para-title">MVC structure & <em>database</em> design</h2>
+            <p class="para-text">The application follows a strict <strong>MVC architecture</strong> powered by Laravel's Eloquent ORM. The database schema was carefully modeled with <strong>MySQL</strong>, covering Users, Products, Categories, Orders, and OrderItems with proper foreign key constraints.</p>
+            <p class="para-text">We implemented a <strong>persistent cart system</strong> using session management and database sync, ensuring items survive browser restarts and are correctly tied to authenticated users.</p>
+            <div class="next-hint" onclick="nextParagraph()">
+              <span class="next-hint-text">Next</span>
+              <div class="next-hint-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+          </div>
+          <div class="paragraph-block" data-index="2" >
+            <div class="para-num">03 / Payment & Notifications</div>
+            <h2 class="para-title">Card payment & <em>email</em> confirmation</h2>
+            <p class="para-text">The checkout flow handles two delivery modes — <strong>card payment and delivery on arrival</strong>. Each mode triggers a different order processing pipeline, with real‑time status updates stored in the database.</p>
+            <p class="para-text">Post‑purchase, the system dispatches a <strong>formatted email confirmation</strong> using Laravel's Mail facade with custom Blade templates — including order summary, items, and expected delivery info.</p>
+            <div class="next-hint" onclick="nextParagraph()">
+              <span class="next-hint-text">Next</span>
+              <div class="next-hint-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+            </div>
+          </div>
+          <div class="paragraph-block" data-index="3" >
+            <div class="para-num">04 / Retrospective</div>
+            <h2 class="para-title">What we <em>learned</em> building this</h2>
+            <p class="para-text">Beyond the technical stack, this project taught us how to <strong>coordinate as a team</strong> — splitting responsibilities, handling merge conflicts, and maintaining a clean Git history across two developers.</p>
+            <p class="para-text">We also deepened our understanding of <strong>security practices</strong>: CSRF protection, input sanitization, and authenticated route guarding — things that matter in any production web application.</p>
+            <div class="para-highlight">"Working in a binôme forces you to write readable code — because someone else has to understand it tomorrow."</div>
+            <div class="end-actions visible">
+              <a href="https://github.com/HibaaZitouni/ecommerce-platform" target="_blank" class="btn-primary">GitHub →</a>
+              <a href="portfolio/index.html" class="btn-ghost">← All projects</a>
+            </div>
+          </div>
+        </div>
+        <div class="progress-dots" id="progressDots"></div>
+      </div>
+    </div>
+
+    <div class="tech-footer">
+      <div class="tech-footer-inner">
+        <div class="tf-label">Tech stack used</div>
+        <div class="tech-pills">
+          <span class="tech-pill primary">PHP 8</span>
+          <span class="tech-pill primary">MySQL</span>
+          <span class="tech-pill">CSS</span>
+          <span class="tech-pill">JS</span>
+        </div>
+        <div class="tf-label">Key outcomes</div>
+        <div class="results-grid">
+          <div class="result-card"><div class="result-val">100%</div><div class="result-label">Features delivered</div></div>
+          <div class="result-card"><div class="result-val">2</div><div class="result-label">Developers, 1 vision</div></div>
+          <div class="result-card"><div class="result-val">∞</div><div class="result-label">Things learned</div></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-logo"><span>🖥️</span> Hiba<span>.</span></div>
+      <span>© 2026 — Built with passion</span>
+      <span style="color: var(--neon); font-size: 0.68rem; letter-spacing: 0.12em;">Morocco</span>
+    </footer>
+
+    <script>
+      const paragraphs = document.querySelectorAll('.paragraph-block');
+      const dotsContainer = document.getElementById('progressDots');
+      const mediaCaption = document.getElementById('mediaCaption');
+      const mediaFrame = document.getElementById('mediaFrame');
+      let current = 0;
+
+      paragraphs.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'pdot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      });
+
+      function goTo(index) {
+        if (index < 0 || index >= paragraphs.length) return;
+        paragraphs[current].classList.remove('visible');
+        setTimeout(() => {
+          paragraphs[current].classList.remove('active');
+          current = index;
+          paragraphs[current].classList.add('active');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => paragraphs[current].classList.add('visible'));
+          });
+          document.querySelectorAll('.pdot').forEach((d, i) => d.classList.toggle('active', i === current));
+          if (paragraphs[current].dataset.caption) mediaCaption.textContent = paragraphs[current].dataset.caption;
+          mediaFrame.classList.add('active-glow');
+          setTimeout(() => mediaFrame.classList.remove('active-glow'), 800);
+        }, 200);
+      }
+
+      function nextParagraph() { if (current < paragraphs.length - 1) goTo(current + 1); }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextParagraph();
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current - 1);
+      });
+
+      requestAnimationFrame(() => requestAnimationFrame(() => paragraphs[0].classList.add('visible')));
+    </script>
+  </body>
+</html>
